@@ -52,6 +52,10 @@ for (let i = 0; i < Deno.args.length; i++) {
       args.labels = next.split(",")
       i++
       break;
+    case "--help":
+      // TODO: show usage
+      console.log("See: https://github.com/hyiromori/github-update-issue/blob/main/README.md")
+      Deno.exit(0)
     default:
       if (arg.startsWith("https://")) {
         args.urls.push(arg)
