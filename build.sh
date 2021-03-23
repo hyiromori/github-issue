@@ -10,5 +10,5 @@ deno compile \
      --allow-net \
      --allow-env \
      --target "x86_64-apple-darwin" \
-     --output "${DIST_DIR}/update-issue" \
+     --output "${DIST_DIR}/update-issue_x86_64-apple" \
      "${INDEX_FILE_PATH}"

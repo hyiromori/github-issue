@@ -4,6 +4,8 @@ GitHub Issue の情報を(ZenHubも含めて)更新するDeno製のCLIツール�
 
 ## 準備
 
+### 環境変数
+
 必要な環境変数を設定しておいてください
 
 - `GITHUB_ACCESS_TOKEN`
@@ -13,6 +15,10 @@ GitHub Issue の情報を(ZenHubも含めて)更新するDeno製のCLIツール�
 - `ZENHUB_ACCESS_TOKEN`
   - ZenHub API にアクセスするためのトークン
   - https://app.zenhub.com/dashboard/tokens
+
+### ダウンロード
+
+[Releases](https://github.com/hyiromori/github-update-issue/releases) から使用したいバージョンのバイナリを落としてパスを通してください。
 
 ## 実行方法
 

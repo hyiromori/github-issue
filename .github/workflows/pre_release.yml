@@ -1,0 +1,32 @@
+name: pre_release
+env:
+  TZ: "Asia/Tokyo"
+  ACTIONS_RUNNER_DEBUG: "true"
+  ACTIONS_STEP_DEBUG: "true"
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  pre_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Setup Deno
+        run: "curl -fsSL https://deno.land/x/install/install.sh | sh"
+      - name: Build
+        run: "sh ./build.sh"
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "TEST"
+          files: |
+            LICENSE
+            dist/*
