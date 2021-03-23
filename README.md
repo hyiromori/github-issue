@@ -31,6 +31,11 @@ $ update-issue \
     'GitHub URL'...
 ```
 
+### ZenHub Workspace ID の取得方法
+
+https://github.com/ZenHubIO/API#notes-1 を参照してください。
+ZenHub の URL 中にあります。
+
 ## 更新可能な項目
 
 ### GitHub
