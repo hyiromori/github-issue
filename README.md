@@ -71,7 +71,7 @@ https://github.com/denoland/deno_install/blob/master/README.md
 ### ビルド
 
 ```bash
-$ ./build.sh
+$ ./script/build.sh
 ```
 
 ### ローカルでの実行

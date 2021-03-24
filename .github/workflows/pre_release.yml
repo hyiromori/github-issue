@@ -23,7 +23,7 @@ jobs:
       - name: Build
         run: |
           export PATH="${HOME}/.deno/bin:${PATH}"
-          ./build.sh
+          ./script/build.sh
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"

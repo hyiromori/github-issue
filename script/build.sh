@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-THIS_DIR="$(cd "$(dirname "${BASH_SOURCE}")"; pwd)"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE}")/.."; pwd)"
 
-INDEX_FILE_PATH="${THIS_DIR}/src/index.ts"
-DIST_DIR="${THIS_DIR}/dist"
+INDEX_FILE_PATH="${ROOT_DIR}/src/index.ts"
+DIST_DIR="${ROOT_DIR}/dist"
 
 mkdir -p "${DIST_DIR}"
 
@@ -14,7 +14,7 @@ function build() {
        --allow-net \
        --allow-env \
        --target "${TARGET}" \
-       --output "${DIST_DIR}/update-github-issue_${TARGET}" \
+       --output "${DIST_DIR}/github-issue_${TARGET}" \
        "${INDEX_FILE_PATH}"
 }
 
