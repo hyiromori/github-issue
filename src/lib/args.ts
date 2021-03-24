@@ -1,74 +1,77 @@
+import parser from "https://deno.land/x/yargs_parser@v20.2.7-deno/deno.ts";
+
+const coreCommand = Deno.args[0] ?? "help";
+const parsedArgs = parser(Deno.args.slice(1));
+
+const toBoolean = (value: unknown, defaultValue: boolean): boolean =>
+  typeof value === "boolean" ? value : defaultValue;
+const toStringOrNull = (value: unknown): string | null =>
+  ["string", "number"].includes(typeof value) ? `${value}` : null;
+const toArray = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value;
+  } else if (typeof value === "string") {
+    return [value];
+  }
+  return [];
+};
+
+const requireString = (value: unknown, valueName: string): string => {
+  if (typeof value === "string") {
+    return value;
+  } else if (typeof value === "number") {
+    return `${value}`;
+  } else if (Array.isArray(value)) {
+    throw new Error(`${valueName} が複数回指定されています`);
+  }
+  throw new Error(`${valueName} を指定してください`);
+};
+const requireArray = (value: string[] | null, valueName: string): string[] => {
+  if (Array.isArray(value) && value.length > 0) {
+    return value;
+  }
+  throw new Error(`${valueName} を指定してください`);
+};
+const requireGitHubUrl = (value: string | null, valueName: string): string => {
+  if (typeof value === "string" && value.startsWith("https://github.com/")) {
+    return value;
+  }
+  throw new Error(`${valueName} には GitHub の URL を指定してください`);
+};
+
 interface Args {
-  command: string;
-  verbose: boolean;
-  labels: string[] | null;
-  pipeline: string | null;
-  workspace: string | null;
   epicUrl: string | null;
+  labels: string[] | null;
+  owner: string | null;
+  pipeline: string | null;
+  repository: string | null;
+  title: string | null;
   urls: string[];
+  verbose: boolean;
+  workspace: string | null;
 }
 
 const args: Args = {
-  command: "help",
-  verbose: false,
-  labels: null,
-  pipeline: null,
-  workspace: null,
-  epicUrl: null,
-  urls: [],
-}
+  epicUrl: toStringOrNull(parsedArgs.epicUrl),
+  labels: toArray(parsedArgs.label),
+  owner: toStringOrNull(parsedArgs.owner),
+  pipeline: toStringOrNull(parsedArgs.pipeline),
+  repository: toStringOrNull(parsedArgs.repository),
+  title: toStringOrNull(parsedArgs.title),
+  urls: toArray(parsedArgs._).map((url) => requireGitHubUrl(url, "---urls")),
+  verbose: toBoolean(parsedArgs.verbose, false),
+  workspace: toStringOrNull(parsedArgs.workspace),
+};
 
-args.command = Deno.args[0] ?? "help"
-
-for (let i = 1; i < Deno.args.length; i++) {
-  const arg: string = Deno.args[i]
-  const next: string | undefined = Deno.args[i + 1]
-  switch (arg) {
-    case "-v":
-    case "--verbose":
-      args.verbose = true
-      break;
-    case "--pipeline":
-      if (next == null) {
-        throw new Error("パイプラインが指定されていません。")
-      }
-      args.pipeline = next
-      i++
-      break;
-    case "--epic-url":
-      if (next == null) {
-        throw new Error("エピックURLが指定されていません。")
-      }
-      args.epicUrl = next
-      i++
-      break;
-    case "--workspace":
-      if (next == null) {
-        throw new Error("ワークスペースが指定されていません。")
-      }
-      args.workspace = next
-      i++
-      break;
-    case "--labels":
-      if (next == null) {
-        throw new Error("ラベルの内容が指定されていません。")
-      }
-      args.labels = next.split(",")
-      i++
-      break;
-    default:
-      if (arg.startsWith("https://")) {
-        args.urls.push(arg)
-        break;
-      }
-      throw new Error(`不明な引数です: ${arg}`)
-  }
-}
-
-export const verbose = (): boolean => args.verbose
-export const getCommand = (): string => args.command
-export const getEpicUrl = (): string | null => args.epicUrl
-export const getLabels = (): string[] | null => args.labels
-export const getPipeline = (): string | null => args.pipeline
-export const getUrls = (): string[] => args.urls
-export const getWorkspace = (): string | null => args.workspace
+export const getCoreCommand = (): string => coreCommand;
+export const verbose = (): boolean => args.verbose;
+export const getRepository = (): string => requireString(args.repository, "--repository")
+export const getEpicUrl = (): string =>
+  requireString(args.epicUrl, "--epic-url");
+export const getTitle = (): string => requireString(args.title, "--title");
+export const getLabels = (): string[] => requireArray(args.labels, "--label");
+export const getPipeline = (): string =>
+  requireString(args.pipeline, "--pipeline");
+export const getUrls = (): string[] => requireArray(args.urls, "--url");
+export const getWorkspace = (): string =>
+  requireString(args.workspace, "--string");
