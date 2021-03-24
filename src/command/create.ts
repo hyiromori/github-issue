@@ -10,7 +10,7 @@ import {
 } from "../lib/args.ts";
 import { checkGitHubIssueUrl } from "../lib/checker/github_issue.ts";
 import { updateIssue } from "../lib/github/update_issue.ts";
-import { movePipeline } from "../lib/zenhub/update_issue.ts";
+import { movePipeline } from "../lib/zenhub/move_pipeline.ts";
 import { addEpic } from "../lib/zenhub/add_epic.ts";
 
 export const create = async (): Promise<void> => {

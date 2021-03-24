@@ -7,7 +7,7 @@ import {
   getUrls,
   getWorkspace,
 } from "../lib/args.ts";
-import { movePipeline } from "../lib/zenhub/update_issue.ts";
+import { movePipeline } from "../lib/zenhub/move_pipeline.ts";
 import { addEpic } from "../lib/zenhub/add_epic.ts";
 
 export const update = async (): Promise<void> => {
