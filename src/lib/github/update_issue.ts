@@ -1,7 +1,7 @@
 import { IssueInfo } from "../types.ts";
 import { getGitHubAccessToken } from "../env.ts";
 import { verbose } from "../args.ts";
-import {debugLog, infoLog} from "../logger.ts";
+import { debugLog, infoLog } from "../logger.ts";
 
 const GitHubURL = "https://api.github.com";
 
@@ -30,6 +30,6 @@ export const updateIssue = async (
   }
 
   infoLog(`Updated Issue: ${issue.url}`);
-  debugLog(`Update data: ${JSON.stringify(data)}`)
+  debugLog(`Update data: ${JSON.stringify(data)}`);
   debugLog(`Response data: ${JSON.stringify(await response.json(), null, 2)}`);
 };

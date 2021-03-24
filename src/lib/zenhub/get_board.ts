@@ -1,6 +1,6 @@
 import { getRepository } from "../github/get_repository.ts";
 import { fetchZenHub } from "./common.ts";
-import {debugLog} from "../logger.ts";
+import { debugLog } from "../logger.ts";
 
 interface Board {
   pipelines: {
@@ -21,6 +21,6 @@ export const getBoard = async (
     `/p2/workspaces/${workspaceId}/repositories/${repositoryId}/board`,
   );
 
-  debugLog(`Board: ${JSON.stringify(board)}`)
-  return board
+  debugLog(`Board: ${JSON.stringify(board)}`);
+  return board;
 };
