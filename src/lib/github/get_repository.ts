@@ -18,14 +18,15 @@ export const getRepository = async (
   }
   const json = await fetchGitHubGraphQL(`
     {
-      organization(login: "${organization}") {
-        repo(name: "${repository}") {
-          id
-        }
+      repository(owner: "${organization}", name: "${repository}") {
+        id
       }
     }`);
+  if ("errors" in json) {
+    throw new Error(`リポジトリデータの取得に失敗しました: ${cacheKey}`)
+  }
   const id: number = parseInt(
-    (decodeBase64(json.data.organization.repo.id).match(/[0-9]+$/) ??
+    (decodeBase64(json.data.repository.id).match(/[0-9]+$/) ??
       [""])[0],
     10,
   );

@@ -1,8 +1,7 @@
-import { IssueInfo } from "../types.ts";
-import { getRepository } from "../github/get_repository.ts";
-import { fetchZenHub } from "./common.ts";
-import { getBoard } from "./get_board.ts";
-import { infoLog } from "../logger.ts";
+import {getRepository} from "../github/get_repository.ts";
+import {fetchZenHub} from "./common.ts";
+import {getBoard} from "./get_board.ts";
+import {infoLog} from "../logger.ts";
 
 interface Args {
   issueNumber: number;
@@ -16,6 +15,7 @@ interface Args {
 export const movePipeline = async (args: Args): Promise<void> => {
   const { issueNumber, organization, repository, workspaceId, pipeline } = args;
   const { pipelines } = await getBoard(organization, repository, workspaceId);
+  console.debug(JSON.stringify(pipelines, null, 2))
   const { id: pipelineId } = pipelines.find(({ name }) => name === pipeline) ??
     { id: null };
   if (pipelineId == null) {

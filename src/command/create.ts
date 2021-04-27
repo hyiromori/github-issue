@@ -1,5 +1,6 @@
 import { createIssue } from "../lib/github/create_issue.ts";
 import {
+  getDescription,
   getEpicUrl,
   getLabels,
   getOwner,
@@ -18,6 +19,7 @@ export const create = async (): Promise<void> => {
     getOwner(),
     getRepository(),
     getTitle(),
+    getDescription() ?? undefined,
   );
   const issue = checkGitHubIssueUrl(url);
 

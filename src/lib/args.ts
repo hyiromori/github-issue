@@ -40,6 +40,7 @@ const requireGitHubUrl = (value: string | null, valueName: string): string => {
 };
 
 interface Args {
+  description: string | null;
   epicUrl: string | null;
   labels: string[] | null;
   owner: string | null;
@@ -52,6 +53,7 @@ interface Args {
 }
 
 const args: Args = {
+  description: toStringOrNull(parsedArgs.description),
   epicUrl: toStringOrNull(parsedArgs.epicUrl),
   labels: toArray(parsedArgs.label),
   owner: toStringOrNull(parsedArgs.owner),
@@ -74,6 +76,7 @@ export const getUrls = (): string[] => requireArray(args.urls, "--url");
 export const getWorkspace = (): string =>
   requireString(args.workspace, "--string");
 
+export const getDescription = (): string | null => args.description;
 export const getLabels = (): string[] | null => args.labels;
 export const getPipeline = (): string | null => args.pipeline;
 export const getEpicUrl = (): string | null => args.epicUrl;

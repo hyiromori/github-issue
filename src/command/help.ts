@@ -12,6 +12,7 @@ const usage = () =>
     "",
     "OPTIONS",
     "  --title <Create Issue Title>",
+    "  --description <Issue Description>",
     "  --epic-url <GitHub Issue URL>",
     "  --label <Label Name>",
     "  --owner <GitHub Repository Owner>",

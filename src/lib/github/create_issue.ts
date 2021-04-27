@@ -1,6 +1,5 @@
-import { getGitHubAccessToken } from "../env.ts";
-import { verbose } from "../args.ts";
-import { debugLog, infoLog } from "../logger.ts";
+import {getGitHubAccessToken} from "../env.ts";
+import {debugLog, infoLog} from "../logger.ts";
 
 const GitHubURL = "https://api.github.com";
 
@@ -13,6 +12,7 @@ export const createIssue = async (
   owner: string,
   repository: string,
   title: string,
+  body: string | undefined
 ): Promise<IssueData> => {
   const path = `/repos/${owner}/${repository}/issues`;
   const response = await fetch(`${GitHubURL}${path}`, {
@@ -21,7 +21,7 @@ export const createIssue = async (
       Authorization: `token ${getGitHubAccessToken()}`,
       Accept: "application/vnd.github.v3+json",
     },
-    body: JSON.stringify({ title }),
+    body: JSON.stringify({ title, body }),
   });
 
   if (!response.ok) {
