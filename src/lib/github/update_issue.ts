@@ -1,6 +1,5 @@
 import { IssueInfo } from "../types.ts";
 import { getGitHubAccessToken } from "../env.ts";
-import { verbose } from "../args.ts";
 import { debugLog, infoLog } from "../logger.ts";
 
 const GitHubURL = "https://api.github.com";
