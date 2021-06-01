@@ -1,12 +1,6 @@
 #![allow(non_snake_case)]
-use serde::{Deserialize, Serialize};
-use std::env;
+use serde::{Serialize, Deserialize};
 use crate::github_api::request_github_graphql_api;
-
-#[derive(Serialize, Debug)]
-pub struct GitHubIssueRequest {
-    query: String,
-}
 
 #[derive(Deserialize, Debug)]
 pub struct ResponseRoot {
@@ -34,23 +28,28 @@ pub struct GitHubIssue {
     pub url: String,
 }
 
-pub async fn get_github_issue(
+#[derive(Serialize, Debug)]
+struct Variables {
     issue_number: i32,
-) -> Result<GitHubIssue, Box<dyn std::error::Error>> {
-    let query = format!(
-        "{{
-      user(login: \"mryhryki\") {{
-        repository(name: \"HOME\"){{
-          issue(number: {}) {{
+}
+
+pub async fn get_github_issue( issue_number: i32, ) -> Result<(), Box<dyn std::error::Error>> {
+    let query = String::from("query ($issue_number: Int!) {
+      user(login: \"mryhryki\") {
+        repository(name: \"HOME\"){
+          issue(number: $issue_number) {
             title
             url
-          }}
-        }}
-      }}
-    }}",
-        issue_number
-    );
+          }
+        }
+      }
+    }");
+    let variables = Variables { issue_number };
 
-    let data = request_github_graphql_api(&query).await?.json::<ResponseRoot>().await?;
-    Ok(data.data.user.repository.issue)
+    let response = request_github_graphql_api(query, variables).await?;
+    let data = response.text().await?;
+    println!("{:#?}", data);
+    // let data = response.json::<ResponseRoot>().await?;
+    // Ok(data.data.user.repository.issue)
+    Ok(())
 }
