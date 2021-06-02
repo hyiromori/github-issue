@@ -1,6 +1,8 @@
 #![allow(non_snake_case)]
-use crate::github::github_api::request_github_graphql_api;
 use serde::{Deserialize, Serialize};
+use base64::decode;
+use regex::Regex;
+use crate::github::github_api::request_github_graphql_api;
 
 #[derive(Deserialize, Debug)]
 pub struct ResponseRoot {
@@ -14,54 +16,39 @@ pub struct Data {
 
 #[derive(Deserialize, Debug)]
 pub struct Repository {
-    issue: GitHubIssue,
-}
-
-#[derive(Deserialize, Debug)]
-pub struct GitHubIssue {
-    pub body: String,
-    pub createdAt: String,
-    pub number: i32,
-    pub title: String,
-    pub updatedAt: String,
-    pub url: String,
+    id: String,
 }
 
 #[derive(Serialize, Debug)]
 struct Variables {
     owner: String,
     repo: String,
-    issue: i32,
 }
 
-pub async fn get_github_issue(
+pub async fn get_github_repo_id(
     owner: &String,
-    repo: &String,
-    issue: &i32,
-) -> Result<GitHubIssue, Box<dyn std::error::Error>> {
+    repo: &String
+) -> Result<String, Box<dyn std::error::Error>> {
     let query = String::from(
-        "query ($owner: String!, $repo: String!, $issue: Int!) {
+        "query ($owner: String!, $repo: String!) {
            repository(owner: $owner, name: $repo) {
-             issue(number: $issue) {
-               body
-               createdAt
-               number
-               title
-               updatedAt
-               url
-             }
+             id
            }
          }",
     );
     let variables = Variables {
         owner: String::from(owner),
-        repo: String::from(repo),
-        issue: issue.clone(),
+        repo:String::from(repo),
     };
 
     let response = request_github_graphql_api(query, variables).await?;
     // let data = response.text().await?;
     // println!("{:#?}", data);
     let data = response.json::<ResponseRoot>().await?;
-    Ok(data.data.repository.issue)
+    let raw_id = String::from_utf8(decode(data.data.repository.id).unwrap()).unwrap();
+
+    let regex = Regex::new(r":Repository(?P<repo_id>\d+)$").unwrap();
+    let caps = regex.captures(&raw_id).unwrap();
+    let repo_id = &caps["repo_id"];
+    Ok(String::from(repo_id))
 }
