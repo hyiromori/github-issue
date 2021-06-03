@@ -1,12 +1,7 @@
-use std::io::{Error, ErrorKind};
-use serde::Deserialize;
 use crate::zenhub::zenhub_api::get_zenhub_api;
-
-#[derive(Deserialize, Debug)]
-pub struct Workspace {
-    name: String,
-    id: String,
-}
+use serde::Deserialize;
+use std::io::{Error, ErrorKind};
+use crate::zenhub::structs::Workspace;
 
 pub async fn get_zenhub_workspaces(
     repo_id: &String,
@@ -18,6 +13,9 @@ pub async fn get_zenhub_workspaces(
         let data: Vec<Workspace> = response.json::<Vec<Workspace>>().await?;
         Ok(data)
     } else {
-        Err(Box::new(Error::new(ErrorKind::Other, "Failed move_pipeline")))
+        Err(Box::new(Error::new(
+            ErrorKind::Other,
+            "Failed move_pipeline",
+        )))
     }
 }

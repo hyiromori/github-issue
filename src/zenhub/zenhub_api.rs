@@ -1,7 +1,7 @@
 #![allow(non_snake_case)]
-use std::env;
 use reqwest::Response;
 use serde::Serialize;
+use std::env;
 
 // https://github.com/ZenHubIO/API#authentication
 fn get_authorization_header() -> String {

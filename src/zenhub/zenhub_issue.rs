@@ -1,25 +1,7 @@
-use std::io::{Error, ErrorKind};
-use serde::{Serialize, Deserialize};
+use crate::zenhub::structs::ZenHubIssue;
 use crate::zenhub::zenhub_api::{get_zenhub_api, post_zenhub_api};
-
-#[derive(Deserialize, Debug)]
-pub struct Estimate {
-    value: i32,
-}
-
-#[derive(Deserialize, Debug)]
-pub struct Pipeline {
-    name: String,
-    pipeline_id: String,
-    workspace_id: String,
-}
-
-#[derive(Deserialize, Debug)]
-pub struct ZenHubIssue {
-    estimate: Option<Estimate>,
-    pipelines: Vec<Pipeline>,
-    is_epic: bool,
-}
+use serde::{Deserialize, Serialize};
+use std::io::{Error, ErrorKind};
 
 pub async fn get_zenhub_issue(
     repo_id: &String,
@@ -35,7 +17,10 @@ pub async fn get_zenhub_issue(
     if response.status() == 200 {
         Ok(response.json::<ZenHubIssue>().await?)
     } else {
-        Err(Box::new(Error::new(ErrorKind::Other, "Failed move_pipeline")))
+        Err(Box::new(Error::new(
+            ErrorKind::Other,
+            "Failed move_pipeline",
+        )))
     }
 }
 
@@ -49,7 +34,7 @@ pub async fn move_pipeline(
     workspace_id: &String,
     repo_id: &String,
     issue_number: &i32,
-    pipeline_id: &String
+    pipeline_id: &String,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let path = format!(
         "/p2/workspaces/{workspace_id}/repositories/{repo_id}/issues/{issue_number}/moves",
@@ -65,6 +50,9 @@ pub async fn move_pipeline(
     if response.status() == 200 {
         Ok(())
     } else {
-        Err(Box::new(Error::new(ErrorKind::Other, "Failed move_pipeline")))
+        Err(Box::new(Error::new(
+            ErrorKind::Other,
+            "Failed move_pipeline",
+        )))
     }
 }

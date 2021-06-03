@@ -1,7 +1,7 @@
 #![allow(non_snake_case)]
-use std::io::{Error, ErrorKind};
-use serde::{Deserialize, Serialize};
 use crate::github::github_api::request_github_graphql_api;
+use serde::{Deserialize, Serialize};
+use std::io::{Error, ErrorKind};
 
 #[derive(Deserialize, Debug)]
 struct ResponseRoot {
@@ -65,6 +65,9 @@ pub async fn get_github_issue(
         let data = response.json::<ResponseRoot>().await?;
         Ok(data.data.repository.issue)
     } else {
-        Err(Box::new(Error::new(ErrorKind::Other, "Failed get_github_issue")))
+        Err(Box::new(Error::new(
+            ErrorKind::Other,
+            "Failed get_github_issue",
+        )))
     }
 }

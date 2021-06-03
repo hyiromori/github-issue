@@ -5,6 +5,7 @@ use crate::github::github_issue::get_github_issue;
 use crate::github::github_repo::get_github_repo_id;
 use crate::zenhub::workspace::get_zenhub_workspaces;
 use crate::zenhub::zenhub_issue::{get_zenhub_issue, move_pipeline};
+use crate::zenhub::board::get_board;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -16,6 +17,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let github_issue = get_github_issue(&owner, &repo, &issue_number).await?;
     let repo_id = get_github_repo_id(&owner, &repo).await?;
     let boards = get_zenhub_workspaces(&repo_id).await?;
+    let pipelines = get_board(&boards.first().unwrap().id, &repo_id).await?;
 
     // move_pipeline(&workspace_id, &repo_id, &issue_number, &pipeline_id).await?;
 
@@ -24,5 +26,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{:#?}", repo_id);
     println!("{:#?}", boards);
     println!("{:#?}", zenhub_issue);
+    println!("{:#?}", pipelines);
     Ok(())
 }
