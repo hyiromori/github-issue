@@ -168,6 +168,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tokio",
+ "youchoose",
 ]
 
 [[package]]
@@ -412,6 +413,17 @@ dependencies = [
  "security-framework",
  "security-framework-sys",
  "tempfile",
+]
+
+[[package]]
+name = "ncurses"
+version = "5.101.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5e2c5d34d72657dc4b638a1c25d40aae81e4f1c699062f72f467237920752032"
+dependencies = [
+ "cc",
+ "libc",
+ "pkg-config",
 ]
 
 [[package]]
@@ -1086,4 +1098,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0120db82e8a1e0b9fb3345a539c478767c0048d842860994d96113d5b667bd69"
 dependencies = [
  "winapi",
+]
+
+[[package]]
+name = "youchoose"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "38603aee8738ef227e6c1418bf1870738b5a84882e6736319def6c7ee6b65983"
+dependencies = [
+ "ncurses",
 ]

@@ -1,9 +1,16 @@
 use serde::{Deserialize, Serialize};
+use std::fmt;
 
 #[derive(Deserialize, Debug)]
 pub struct Workspace {
     pub name: String,
     pub id: String,
+}
+
+impl fmt::Display for Workspace {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{name} (ID: {id})", name = self.name, id = self.id)
+    }
 }
 
 #[derive(Deserialize, Debug)]
